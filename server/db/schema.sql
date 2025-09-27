@@ -1,0 +1,51 @@
+-- DROP tables (in reverse order of dependencies)
+DROP TABLE IF EXISTS favorites;
+DROP TABLE IF EXISTS spots;
+DROP TABLE IF EXISTS cities;
+DROP TABLE IF EXISTS countries;
+DROP TABLE IF EXISTS continents;
+DROP TABLE IF EXISTS app_users;
+
+-- USERS table
+CREATE TABLE app_users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  password VARCHAR(100) NOT NULL
+);
+
+-- CONTINENTS table
+CREATE TABLE continents (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL
+);
+
+-- COUNTRIES table
+CREATE TABLE countries (
+  id SERIAL PRIMARY KEY,
+  continent_id INT REFERENCES continents(id) ON DELETE CASCADE,
+  name VARCHAR(100) NOT NULL
+);
+
+-- CITIES table
+CREATE TABLE cities (
+  id SERIAL PRIMARY KEY,
+  country_id INT REFERENCES countries(id) ON DELETE CASCADE,
+  name VARCHAR(100) NOT NULL
+);
+
+-- SPOTS table
+CREATE TABLE spots (
+  id SERIAL PRIMARY KEY,
+  city_id INT REFERENCES cities(id) ON DELETE CASCADE,
+  name VARCHAR(100) NOT NULL,
+  description TEXT,
+  image_url TEXT,
+  mode VARCHAR(20) CHECK (mode IN ('day', 'night', 'both'))
+);
+
+-- FAVORITES table
+CREATE TABLE favorites (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES app_users(id) ON DELETE CASCADE,
+  spot_id INT REFERENCES spots(id) ON DELETE CASCADE
+);
