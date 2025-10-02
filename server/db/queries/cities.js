@@ -1,5 +1,4 @@
 import { client } from "../client.js";
-
 // Get all cities in a country
 async function getCitiesByCountry(countryId) {
   const { rows } = await client.query(

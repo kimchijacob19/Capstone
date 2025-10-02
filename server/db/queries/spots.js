@@ -1,5 +1,4 @@
 import { client } from "../client.js";
-
 // Get all spots in a city
 export async function getSpotsByCity(cityId) {
   const { rows } = await client.query(

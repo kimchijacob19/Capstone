@@ -15,10 +15,13 @@ router.get("/city/:cityId", async (req, res, next) => {
 });
 
 // GET /api/spots/detail/:spotId
-router.get("/detail/:spotId", async (req, res, next) => {
+router.get("/:spotId", async (req, res, next) => {
   try {
     const { spotId } = req.params;
     const spot = await getSpotById(spotId);
+    if (!spot) {
+      return res.status(404).json({ error: "Spot not found" });
+    }
     res.json(spot);
   } catch (err) {
     next(err);

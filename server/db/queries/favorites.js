@@ -1,25 +1,13 @@
 import { client } from "../client.js";
-
 // Get favorites for a user
 export async function getFavoritesByUser(userId) {
   const { rows } = await client.query(
     `
-    SELECT f.id AS favorite_id,
-           s.id AS spot_id,
-           s.name AS spot_name,
-           s.description,
-           s.mode,
-           c.name AS city,
-           co.name AS country,
-           ct.name AS continent
+    SELECT f.id, f.spot_id, s.name, s.description, s.image_url, s.mode
     FROM favorites f
     JOIN spots s ON f.spot_id = s.id
-    JOIN cities c ON s.city_id = c.id
-    JOIN countries co ON c.country_id = co.id
-    JOIN continents ct ON co.continent_id = ct.id
     WHERE f.user_id = $1
-    ORDER BY f.id;
-    `,
+  `,
     [userId]
   );
   return rows;

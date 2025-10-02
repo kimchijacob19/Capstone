@@ -9,9 +9,13 @@ DROP TABLE IF EXISTS app_users;
 -- USERS table
 CREATE TABLE app_users (
   id SERIAL PRIMARY KEY,
-  username VARCHAR(50) UNIQUE NOT NULL,
-  password VARCHAR(100) NOT NULL
+  username TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
 );
+
 
 -- CONTINENTS table
 CREATE TABLE continents (
