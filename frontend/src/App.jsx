@@ -9,6 +9,8 @@ import {
   removeFavorite,
 } from "./api/api";
 import Auth from "./Auth.jsx";
+import Map, { Marker } from "react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 function App() {
   const [continents, setContinents] = useState([]);
@@ -28,9 +30,12 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [activeTab, setActiveTab] = useState("explore");
 
+  const MAPBOX_TOKEN =
+    "pk.eyJ1IjoiamNob2kxOSIsImEiOiJjbWc5eWRscmgwbmFmMnJwbHJkbDN0NWhoIn0.3AavJNdXGc9sQNP_07i4ZQ";
+
   // fetch continents after login
   useEffect(() => {
-    if (!token) return; // only run when logged in
+    if (!token) return;
     async function loadContinents() {
       try {
         setLoading(true);
@@ -45,7 +50,7 @@ function App() {
     loadContinents();
   }, [token]);
 
-  // continent to countries
+  // continent → countries
   useEffect(() => {
     if (!selectedContinent) return;
     async function loadCountries() {
@@ -66,7 +71,7 @@ function App() {
     loadCountries();
   }, [selectedContinent]);
 
-  // country to cities
+  // country → cities
   useEffect(() => {
     if (!selectedCountry) return;
     async function loadCities() {
@@ -85,7 +90,7 @@ function App() {
     loadCities();
   }, [selectedCountry]);
 
-  // city to spot
+  // city → spots
   useEffect(() => {
     if (!selectedCity) return;
     async function loadSpots() {
@@ -119,7 +124,7 @@ function App() {
     loadFavorites();
   }, [token, activeTab]);
 
-  // mode toggle
+  // mode filter
   const filteredSpots = (() => {
     if (!spots.length) return [];
     switch (filterMode) {
@@ -127,14 +132,12 @@ function App() {
         return spots.filter((s) => s.mode === "day" || s.mode === "both");
       case "night":
         return spots.filter((s) => s.mode === "night" || s.mode === "both");
-      case "both":
-        return spots; // union
       default:
         return spots;
     }
   })();
 
-  // favorite handler
+  // favorites handlers
   async function handleAddFavorite(spotId) {
     try {
       const newFav = await addFavorite(token, spotId);
@@ -155,7 +158,6 @@ function App() {
     }
   }
 
-  // conditional rendering(after login)
   return (
     <div style={{ padding: "1rem" }}>
       <h1>WebSpot Guide</h1>
@@ -192,6 +194,65 @@ function App() {
           {loading && <p>Loading...</p>}
           {error && <p style={{ color: "red" }}>{error}</p>}
 
+          {/* Shared Map - always visible */}
+          <Map
+            initialViewState={{
+              latitude:
+                activeTab === "explore"
+                  ? filteredSpots[0]?.latitude || 20
+                  : favorites[0]?.latitude || 20,
+              longitude:
+                activeTab === "explore"
+                  ? filteredSpots[0]?.longitude || 0
+                  : favorites[0]?.longitude || 0,
+              zoom:
+                (activeTab === "explore" && filteredSpots.length > 0) ||
+                (activeTab === "favorites" && favorites.length > 0)
+                  ? 4
+                  : 1.5,
+            }}
+            style={{
+              width: "100%",
+              height: 400,
+              marginBottom: "1rem",
+            }}
+            mapStyle="mapbox://styles/mapbox/streets-v11"
+            mapboxAccessToken={MAPBOX_TOKEN}
+          >
+            {activeTab === "explore" &&
+              filteredSpots.map(
+                (s) =>
+                  s.latitude &&
+                  s.longitude && (
+                    <Marker
+                      key={s.id}
+                      latitude={parseFloat(s.latitude)}
+                      longitude={parseFloat(s.longitude)}
+                    >
+                      <span style={{ fontSize: "20px", color: "red" }}>📍</span>
+                    </Marker>
+                  )
+              )}
+
+            {activeTab === "favorites" &&
+              favorites.map(
+                (f) =>
+                  f.latitude &&
+                  f.longitude && (
+                    <Marker
+                      key={f.id}
+                      latitude={parseFloat(f.latitude)}
+                      longitude={parseFloat(f.longitude)}
+                    >
+                      <span style={{ fontSize: "20px", color: "blue" }}>
+                        🎯
+                      </span>
+                    </Marker>
+                  )
+              )}
+          </Map>
+
+          {/* Explore tab */}
           {activeTab === "explore" && (
             <>
               {/* Filter */}
@@ -252,16 +313,14 @@ function App() {
               )}
 
               {/* Spots */}
-              {spots.length > 0 && (
+              {filteredSpots.length > 0 && (
                 <>
                   <h2>Spots</h2>
                   <ul>
                     {filteredSpots.map((s) => {
-                      // check if this spot is already in favorites
                       const isFavorite = favorites.some(
                         (f) => f.spot_id === s.id
                       );
-
                       return (
                         <li key={s.id} style={{ marginBottom: "1rem" }}>
                           <h3>{s.name}</h3>
@@ -303,6 +362,7 @@ function App() {
             </>
           )}
 
+          {/* Favorites tab */}
           {activeTab === "favorites" && (
             <>
               <h2>My Favorites</h2>

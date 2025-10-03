@@ -21,8 +21,10 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "mapbox-gl": "^3.15.0",
     "morgan": "^1.10.0",
     "pg": "^8.11.5",
+    "react-map-gl": "^8.0.4",
     "react-router-dom": "^7.9.3"
   },
   "devDependencies": {

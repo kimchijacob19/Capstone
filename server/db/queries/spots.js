@@ -3,12 +3,14 @@ import { client } from "../client.js";
 export async function getSpotsByCity(cityId) {
   const { rows } = await client.query(
     `
-      SELECT 
-        s.id, 
-        s.name, 
-        s.description, 
-        s.image_url, 
+      SELECT
+        s.id,
+        s.name,
+        s.description,
+        s.image_url,
         s.mode,
+        s.latitude,
+        s.longitude,
         c.name AS city_name
       FROM spots s
       JOIN cities c ON s.city_id = c.id
@@ -24,11 +26,11 @@ export async function getSpotsByCity(cityId) {
 export async function getSpotById(spotId) {
   const { rows } = await client.query(
     `
-      SELECT 
-        s.id, 
-        s.name, 
-        s.description, 
-        s.image_url, 
+      SELECT
+        s.id,
+        s.name,
+        s.description,
+        s.image_url,
         s.mode,
         c.name AS city_name,
         co.name AS country_name,

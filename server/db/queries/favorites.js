@@ -3,13 +3,24 @@ import { client } from "../client.js";
 export async function getFavoritesByUser(userId) {
   const { rows } = await client.query(
     `
-    SELECT f.id, f.spot_id, s.name, s.description, s.image_url, s.mode
+    SELECT 
+      f.id,
+      f.user_id,
+      f.spot_id,
+      s.name AS spot_name,
+      s.description,
+      s.image_url,
+      s.mode,
+      s.latitude,
+      s.longitude
     FROM favorites f
     JOIN spots s ON f.spot_id = s.id
     WHERE f.user_id = $1
-  `,
+    ORDER BY f.id;
+    `,
     [userId]
   );
+
   return rows;
 }
 

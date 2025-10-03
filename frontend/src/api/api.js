@@ -30,12 +30,17 @@ export async function fetchSpots(cityId) {
 
 // favorites
 export async function fetchFavorites(token) {
+  console.log("Fetching favorites with token:", token); // to check if the token is really being sent
   const res = await fetch(`${API_URL}/favorites`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   });
   if (!res.ok) throw new Error("Failed to fetch favorites");
   return res.json();
 }
+
 // adding favorites
 export async function addFavorite(token, spotId) {
   const res = await fetch(`${API_URL}/favorites`, {
@@ -44,17 +49,19 @@ export async function addFavorite(token, spotId) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ spotId }),
+    body: JSON.stringify({ spot_id: spotId }),
   });
   if (!res.ok) throw new Error("Failed to add favorite");
   return res.json();
 }
 
 // removing favorites
-export async function removeFavorite(token, favId) {
-  const res = await fetch(`${API_URL}/favorites/${favId}`, {
+export async function removeFavorite(token, favoriteId) {
+  const res = await fetch(`${API_URL}/favorites/${favoriteId}`, {
     method: "DELETE",
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
   if (!res.ok) throw new Error("Failed to remove favorite");
   return res.json();
