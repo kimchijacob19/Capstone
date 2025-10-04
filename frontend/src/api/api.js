@@ -30,7 +30,6 @@ export async function fetchSpots(cityId) {
 
 // favorites
 export async function fetchFavorites(token) {
-  console.log("Fetching favorites with token:", token); // to check if the token is really being sent
   const res = await fetch(`${API_URL}/favorites`, {
     headers: {
       "Content-Type": "application/json",

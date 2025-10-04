@@ -1,42 +1,212 @@
-#root {
-  max-width: 1280px;
+/* body */
+body {
+  margin: 0;
+  font-family: "Satoshi", sans-serif;
+  background-color: #f9f9f9;
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+/* app container */
+.app-container {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 1rem;
+}
+
+/* headings */
+h1,
+h2,
+h3 {
+  font-family: "ClashDisplay", sans-serif;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
   text-align: center;
+  color: #414241;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+h2 {
+  font-size: 1.6rem;
+  margin-top: 2rem;
+  color: #1f2937;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+  color: #111827;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* navbar and tools */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+/* primary action */
+button.primary {
+  background: #a592bc;
+  color: white;
+}
+button.primary:hover {
+  background: #9778bd;
+}
+
+/* secondary action */
+button.secondary {
+  background: #ebe5e5;
+  color: #111827;
+}
+button.secondary:hover {
+  background: #9778bd;
+}
+
+/* remove action */
+button.remove {
+  background: #ff5454;
+  color: white;
+}
+button.remove:hover {
+  background: #ff0909;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* map */
+.map-container {
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
 .card {
-  padding: 2em;
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
 }
 
-.read-the-docs {
-  color: #888;
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+/* favorite badge ⭐ */
+.card.favorite::after {
+  content: "⭐ Next Booking";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #fff4c9;
+  color: #111827;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* mobile-tablet view */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .map-container {
+    height: 300px;
+  }
+}
+
+/* Drill-down rows */
+.drilldown-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.drilldown-list li {
+  list-style: none;
+}
+
+.drilldown-list button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #1f2937;
+  font-size: 0.9rem;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.drilldown-list button:hover {
+  background: #a592bc;
+  transform: translateY(-2px);
+}
+
+/* toggle switches */
+
+/* font-faces */
+@font-face {
+  font-family: "Satoshi";
+  src: local("Satoshi"), url("./fonts/Satoshi/Fonts/TTF/Satoshi-Variable.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ClashDisplay";
+  src: local("ClashDisplay"),
+    url("./fonts/ClashDisplay/Fonts/TTF/ClashDisplay-Variable.ttf");
+  font-weight: normal;
+  font-style: normal;
 }
